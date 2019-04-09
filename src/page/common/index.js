@@ -1,3 +1,13 @@
 'use strict'
 
-console.log('I am global');
+var _mm = require('util/mm.js');
+require('../index/index.css')
+_mm.request({
+    url: './test.do',
+    success: function(res){
+        console.log(res);
+    },
+    error: function(errMsg){
+        console.log(errMsg);
+    }
+})

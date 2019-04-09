@@ -3,22 +3,22 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 //获取html-webpack-plugin参数方法
-var getHtmlConfig = function(name){
+var getHtmlConfig = function(name, title){
     return{
               template  : `./src/view/${name}.html`,
               filename  : `view/${name}.html`,
+              title     : title,
               inject    : true,
               hash      : true,
-              chunks    : ['common', 'index']
+              chunks    : ['common', name]
     }
 }
 
 var config = {
     mode: 'development',
     entry: {
-        'common': ['./src/page/common/index.js'],
-        'index': ['./src/page/index/index.js'],
-        'login': ['./src/page/login/index.js']
+        // 'common': './src/page/common/index.js',
+        'index': './src/page/index/index.js',
     },
     output:{
         path: path.resolve(__dirname, 'dist'),
@@ -55,8 +55,9 @@ var config = {
             chunkFilename   : "[id].css"
           }),
           //html模板处理
-          new HtmlWebpackPlugin(getHtmlConfig('index')),
-          new HtmlWebpackPlugin(getHtmlConfig('login'))
+          new HtmlWebpackPlugin(getHtmlConfig('index', '首页')),
+          new HtmlWebpackPlugin(getHtmlConfig('login', '登录')),
+          new webpack.HotModuleReplacementPlugin()
     ],
     optimization: {
 		splitChunks: {
@@ -71,13 +72,21 @@ var config = {
     },
     devServer:{
         contentBase:'./dist',					//配置服务开启在dist文件夹下
-        open: true,							//可在启动webpackdevserver时自动打开浏览器
-        proxy:{
-            '/api': 'http://localhost:3000'	//可配置请求转发（当访问 /api 接口时，自动转发到 localhost:3000 下）
-        },
-        port: 8080,							//可配置webpack-dev-server启动时的端口地址
+        // open: true,							//可在启动webpackdevserver时自动打开浏览器
+        // proxy:{
+        //     '/api': 'http://localhost:3000'	//可配置请求转发（当访问 /api 接口时，自动转发到 localhost:3000 下）
+        // },
+        // port: 8080,							//可配置webpack-dev-server启动时的端口地址
         hot: true,
-        hotOnly: true
+        // hotOnly: true
+    },
+    resolve: {
+        alias: {
+            util    : __dirname + '/src/util',
+            page    : __dirname + '/src/page',
+            service : __dirname + '/src/service',
+            image   : __dirname + '/src/image',
+        }
     }
 
 }

@@ -1,3 +1,4 @@
 'use strict'
-require('../module.js')
+require('../../bar');
+bar();
 console.log('hello login');
